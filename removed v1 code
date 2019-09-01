@@ -1,0 +1,634 @@
+    //-----------------Sort.java-------------------//
+    
+    	   
+/**                        getMost
+* Track cards that appear in a Hand multiple times. A 5-card hand can have at
+* most 2 cards that appear multiple times, so this is a 2-int array that
+* contains the most- and second-most-frequently occurring Cards.
+* This is used for sorting and scoring the Hands.
+* 
+* @param counts     the value that changed
+* @return           int array with the number of times the most-frequently
+*                   occurring cards appear. The actual card values are not 
+*                   specified.
+*
+*/
+	/*
+    static int[] getMost(int[] counts){
+        int removed = 0;
+        int most = 0, nextMost = 0;
+        for(int index = 0; index < Deck.CPH; index++ ){
+            if(counts[index] > most){
+                most = counts[index];
+                removed = index;
+            }
+        }
+        for(int nindex = 0; nindex < Deck.CPH;
+                nindex++){
+            if((counts[nindex] > nextMost) && (nindex != removed)){
+                nextMost = counts[nindex];
+            }
+        }
+        return new int[]{most, nextMost};
+    }
+	*/
+
+ /*----------------- getMostCount ----------------------------------------------
+ * function getMostCount()
+ *
+ * Purpose: used by getScore to find which cards appear in the hand the most.
+ *      Two-integer array is calculated & stored during the sortHand function
+ *
+ * @return int[] - the two most common ranks in descending order. Given 5
+ *      cards, there can be at most two ranks that appear in multiple
+ *
+------------------------------------------------------------------------------*/
+ /**
+ *
+ */
+	/*
+    int[]getMostCount(){
+        return mCount;
+    } 
+    */
+    
+    /**                        sortHand_old
+     * Arranges a Hand of Card objects in order from lowest to highest value. 
+     * Groupings, such as pairs, are set at the high position, even if their face
+     * value is lower than those of any of the other cards. Multiple instances of
+     * groupings, as in two pairs or a full house, are themselves arranged in
+     * ascending order. 
+     * <p>
+     * The function iterates through the hand to determine the order of values and
+     * whether any cards appear multiple times. The array mostCount tracks 
+     * multiple appearances of up to 2 cards (more than 2 is impossible in a 5-card
+     * hand). 
+     * 
+     * @param uHand    the Hand object to be processed
+     * @return         the Hand in sorted order
+     *
+     */
+    /*
+        Hand sortHand_old(Hand uHand){
+    	int most = Poker.ZERO;
+    	int nextMost = Poker.ZERO;
+    	int temp = Poker.ZERO;
+            int temp2 = Poker.ZERO;
+            int tempCount = Poker.ZERO;
+
+    	int highCard = Poker.ZERO;
+    	int nextCard = Poker.ZERO;
+    	int thirdCard = Poker.ZERO;
+    	int fourthCard = Poker.ZERO;
+    	int lowCard = Deck.DECK_SIZE;
+            
+            int highCount = Poker.ZERO; 
+            int nextCount = Poker.ZERO;
+            int thirdCount = Poker.ZERO;
+            int fourthCount = Poker.ZERO; 
+            int lowCount = Poker.ZERO;
+            int suitCount = Poker.ZERO;
+            
+            int[] mostCount = new int[]{most, nextMost};
+        // Case: new card is same rank as existing high card
+    	for (int index = Card.CARD_INIT; index <= Deck.CPH; index++){
+                if (uHand.hand[index].rank == highCard){
+                    highCount++;                    
+                    if(thirdCard > Poker.ZERO){
+                        fourthCard = thirdCard;
+                        fourthCount = thirdCount;
+                    }
+                    if(nextCard > Poker.ZERO){
+                        thirdCard = nextCard;
+                        thirdCount = nextCount;
+                    }
+                    nextCard = uHand.hand[index].rank;
+                    nextCount = 0;
+                }  
+                else{
+                    if (uHand.hand[index].rank > highCard){
+            // Case: first card read in is the first high card
+                        if(index == 1){
+                            highCard = uHand.hand[index].rank;
+                            highCount++;
+                        }
+                        else{
+            // Case: new card is higher than existing high card 
+                           // if(highCard == lowCard){
+                //Case: Two or more very low cards have been read in
+                                
+                                
+                            //}
+                            if(lowCard == Deck.DECK_SIZE){
+                                /* if there's a high card
+            * 					but not a low card */ 
+    /*
+                                lowCard = highCard;
+                                lowCount = highCount;
+                            }
+                            else{
+                            */
+                                /* add the new high card and push any
+            * 					existing cards down the ranks */
+                                // Safe: If there were already a fourth card, we
+                                // wouldn't still be reading in new cards
+    /*
+                                if(thirdCard > Poker.ZERO){
+                                    fourthCard = thirdCard;
+                                    fourthCount = thirdCount;
+                                }
+                                if(nextCard > Poker.ZERO){
+                                    thirdCard = nextCard;
+                                    thirdCount = nextCount;
+                                }
+                                nextCard = highCard;
+                                nextCount = highCount;
+                            }
+                            highCard = uHand.hand[index].rank;
+                            highCount = Card.CARD_INIT;
+                        }
+                    }
+                    else 
+        // Cases: new card matches one already read
+                {      
+                    if (uHand.hand[index].rank == lowCard){
+                        if(fourthCard != Poker.ZERO){
+                            if(thirdCard == fourthCard){
+                                nextCard = thirdCard;
+                            }
+                            thirdCard = fourthCard;
+                        }
+                        lowCount++; 
+                        fourthCard = uHand.hand[index].rank;
+                        //mostCount = getMost(uHand.hand[index].rank, lowCount, 
+                        //        most, nextMost); 
+                    }    
+                    else
+                        if (uHand.hand[index].rank == thirdCard){
+                            thirdCount++; 
+                            fourthCard = uHand.hand[index].rank;
+                            //mostCount = getMost(uHand.hand[index].rank, thirdCount, 
+                            //        most, nextMost); 
+                        }
+                    else          
+                        if (uHand.hand[index].rank == nextCard){
+                            nextCount++; 
+                            if(thirdCard != Poker.ZERO){
+                                fourthCard = thirdCard;
+                                //fourthCount = thirdCount;
+                            }
+                            //tempCount = thirdCount;
+                            //thirdCard = nextCard;
+                            //thirdCount = tempCount;
+                            thirdCard = uHand.hand[index].rank;
+                        }
+                    else
+                    if (uHand.hand[index].rank < lowCard){
+        // Case: second card read in has to be either high card or low card
+        // don't tie it to index- could get 4-of-a-kind as 1st 4 cards
+                        if(uHand.hand[index].rank == highCard){
+                            if(nextCard == Poker.ZERO){
+                                nextCard = uHand.hand[index].rank;
+                            }
+                            else
+                                if(thirdCard == Poker.ZERO){
+                                    thirdCard = uHand.hand[index].rank;
+                                }
+                            else
+                                if(fourthCard == Poker.ZERO){
+                                    fourthCard = uHand.hand[index].rank;
+                                }
+                            highCount++;
+                            //mostCount = getMost(uHand.hand[index].rank, highCount, 
+                            //        most, nextMost);
+                        }
+                        else{
+        // Case: new card read in is lower than the existing low card
+                                if ((lowCount > 0) || (lowCard != Deck.DECK_SIZE)){
+                                */
+                                    /* if there's already a low card:
+                                                move it up the line */
+    /*
+                                    if (nextCard == Poker.ZERO){  
+                                        nextCount = lowCount;
+                                        nextCard = lowCard;	
+                                    }
+                                    else
+                                    if ((thirdCard == Poker.ZERO)
+                                                && (nextCard > Poker.ZERO)){
+                                        thirdCount = lowCount;
+                                        thirdCard = lowCard;
+                                    }
+                                    else
+                                    if ((fourthCard == Poker.ZERO)
+                                                    && (thirdCard > Poker.ZERO)){
+                                        fourthCount = lowCount;
+                                        fourthCard = lowCard;
+                                    }
+                                }
+                                lowCard = uHand.hand[index].rank;
+                                lowCount = Card.CARD_INIT;
+                                //mostCount = getMost(uHand.hand[index].rank, 
+                                 ////       lowCount, most, nextMost);
+                            }
+                        }
+                        else
+                            if ((uHand.hand[index].rank > nextCard)
+                                && (index > 2)
+                                    && (uHand.hand[index].rank < highCard)){
+        // Case: new card is higher than the existing second-highest card
+                                if(thirdCard > Poker.ZERO){
+                                    fourthCard = thirdCard;
+                                    fourthCount = thirdCount;
+                                }
+                            thirdCard = nextCard;
+                            thirdCount = nextCount;
+                            nextCard = uHand.hand[index].rank;
+                            nextCount = Card.CARD_INIT;	
+                            //mostCount = getMost(uHand.hand[index].rank, nextCount, 
+                            //        most, nextMost); 
+                            }
+                    else
+                        if ((uHand.hand[index].rank > thirdCard)
+                                && (index > 2)
+                                        && (uHand.hand[index].rank < nextCard)){
+        // Case: new card is lower than existing second but higher than third card
+                            if(fourthCard == Poker.ZERO){
+                                fourthCard = thirdCard;
+                                fourthCount = thirdCount;
+                            }
+                            thirdCard = uHand.hand[index].rank;
+                            thirdCount = Card.CARD_INIT;
+                            //mostCount = getMost(uHand.hand[index].rank, thirdCount, 
+                            //        most, nextMost); 
+                        } 
+                    else
+        // Should only happen if there is no existing fourth card                    
+                        if ((uHand.hand[index].rank > fourthCard)
+                                && (uHand.hand[index].rank < thirdCard)
+                                    && (uHand.hand[index].rank > lowCard)
+                                        && (index > 2)){
+                            fourthCard = uHand.hand[index].rank;
+                            fourthCount = Card.CARD_INIT;
+                            //mostCount = getMost(uHand.hand[index].rank, 
+                            //        fourthCount, most, nextMost); 
+                        }
+                    
+                    }
+                    }
+            }
+            int[] counts = new int[]{highCount, nextCount, thirdCount, fourthCount, 
+                lowCount};
+            mostCount = getMost(counts);
+            most = mostCount[0];
+            nextMost = mostCount[1];
+            */
+            /*
+            System.out.print("most: " + most + " next most: " + nextMost);
+            System.out.println("High: " + highCard + " next: " + nextCard
+                + " low: " + lowCard);
+            */
+    	/* Reorder the cards by groupings */
+    	/* First find which occurs most & 2nd most */
+    	/* A five-card hand allows at most two groupings of more than one card*/
+    	
+    	/* Now reorder their positions */
+    /*
+    	if((most == 2) && (nextMost == 2)){
+                /* hand has two pairs */
+                //if(highCount != most){
+                    /* other two values are the pairs */
+    /*
+                    if(nextCount == most){
+                            temp = highCard;
+                            tempCount = highCount;
+                            highCard = nextCard;
+                            highCount = most;
+                            nextCard = thirdCard;
+                            nextCount = nextMost;
+                            thirdCard = fourthCard;
+                            fourthCard = lowCard;
+                            lowCount = tempCount;
+                            lowCard = temp;
+                    }
+                }
+                */
+                // If highCount = most and nextCount = nextMost, it's already sorted
+    /*
+                else
+                if((highCount == most) && (thirdCount != nextMost)){
+                        temp = thirdCard;
+                        tempCount = thirdCount;
+                        thirdCard = fourthCard;
+                        nextCount = nextMost;
+                        fourthCard = lowCard;
+                        lowCount = tempCount;
+                        lowCard = temp;		
+                }
+    	}
+    	else 
+    	if(most == 4){
+                if(highCount != most){
+                    temp = highCard;
+                    highCard = lowCard;
+                    lowCount = highCount;
+                    highCount = most;
+                    lowCard = temp;
+                }
+    	}
+    	else
+    	if(most == 3){
+                if(nextMost == 2){
+                */
+                // full house */
+    
+                //    if(highCount != most){
+                        /* low card is the three of a kind,
+    * 					switch high and low */
+    /*
+                        temp = highCard;
+                        temp2 = nextCard;
+                        highCard = lowCard;
+                        //lowCount = highCount;
+                        highCount = most;
+                        nextCard = fourthCard;
+                        nextCount = nextMost;
+                        fourthCard = temp;
+                        lowCard = temp2;
+                    }
+                }
+                else
+                if(highCount != most){
+                */
+                    /* if high card is most
+    * 				then hand is already in order */
+                  //  if(nextCount != most){
+                        /* low card is most */
+                        /* reorder low-high-next */
+    /*
+                        temp = highCard;
+                        temp2 = nextCard;
+                        tempCount = highCount;
+                        highCard = lowCard;
+                        highCount = most;
+                        lowCard = temp2;
+                        lowCount = tempCount;
+                        nextCard = fourthCard;
+                        nextCount = nextMost;
+                        fourthCard = temp;	
+                    }
+                    else {
+                    */
+                        /* next card is most */
+                        /* reorder next-high-low */
+    /*
+                        temp = highCard;
+                        tempCount = highCount;
+                        highCount = most;
+                        highCard = nextCard;
+                        nextCard = thirdCard;
+                        thirdCard = fourthCard;
+                        thirdCount = most;
+                        fourthCard = temp;
+                        fourthCount = nextMost;
+                    }
+                }
+    	}
+    	else
+    	if((most == 2) && (nextMost == 1)){
+    	*/
+                /* One pair */
+                /* Make pair the high card, others follow in order */
+                //if(highCount != most){
+                    /* Nothing to do if high card is the pair */
+                	/*
+                    if(nextCount == most){
+                        temp = highCard;
+                        tempCount = highCount;
+                        highCard = nextCard;
+                        highCount = most;
+                        nextCount = tempCount;
+                        nextCard = thirdCard;
+                        thirdCard = temp;
+                    }
+                    else
+                    if(thirdCount == most){
+                        temp = highCard;
+                        temp2 = nextCard;
+                        tempCount = highCount;
+                        highCard = thirdCard;
+                        highCount = most;
+                        nextCard = fourthCard;
+                        nextCount = nextMost;
+                        thirdCount = tempCount;
+                        thirdCard = temp;
+                        fourthCard = temp2;
+                    }
+                    else
+                    if(lowCount == most){
+                        temp = highCard;
+                        temp2 = nextCard;
+                        int temp3 = thirdCard;
+                        tempCount = highCount;
+                        highCard = lowCard;
+                        highCount = most;
+                        nextCard = fourthCard;
+                        nextCount = nextMost;
+                        lowCount = thirdCount;
+                        thirdCount = tempCount;
+                        lowCard = temp3;
+                        fourthCard = temp2;
+                        thirdCard = temp;
+                    }
+                }
+    	}
+            int[] sorted = new int[]{Poker.ZERO, lowCard, fourthCard, thirdCard, nextCard,
+                highCard};
+            
+            setMostCount(mostCount);
+            
+            return getSortedHand(sorted, uHand);
+        }
+            */
+        
+/*----------------- setMostCount -----------------------------------------------
+ * function setMostCount(Int[]) 
+ *
+ * Purpose: Stores the values for the most commonly occurring rank or ranks
+ *      that were obtained in the sortHand function.
+ *
+ * @param - Int[] mostCount - the two most-occurring ranks in the hand.
+ *      anything past that will be a 1, and both of these values may also be 1
+ *
+ * @return - void - stores the values for the getMostCount function, called
+ *      from getScore
+ *
+------------------------------------------------------------------------------*/
+ /**
+ *
+ */
+        /*
+    void setMostCount(int[] mostCount){
+        mCount = mostCount;
+    }
+ 	*/
+ 
+ //----------------Score.java--------------------	
+ 	    
+/**                     getScore_old
+ * Assigns a score to each hand. Scoring is based on five-card draw rules as
+ * referenced from website https://www.pokerstars.com/poker/games/rules/hand-rankings/ 
+ * <p>
+ * Order of rankings:
+ * <li>Straight flush</li>
+ * <li>Four of a kind</li>
+ * <li>Full house</li>
+ * <li>Flush</li>
+ * <li>Straight</li>
+ * <li>Three of a kind</li>
+ * <li>Two pair</li>
+ * <li>One pair</li>
+ * <li>High card</li>
+ * <p>
+ * The low cards, which are not part of a ranking or are not the high card in a 
+ * hand with no groupings, are used as tiebreakers. Hands are sorted in order, and
+ * a tie at one position will result in the next lower card being used as a tiebreaker.
+ * Each position is weighted so that the higher card has more influence on the 
+ * hand score. For example, a 4 and a 3 cannot outrank a 5 and an ace. Each position
+ * in the hand carries a base score that is higher than what the next lower position
+ * can achieve, and each ranking carries a base score that is higher than the 
+ * highest possible score of the next lower ranking.
+ * <p>
+ * This function analyzes each hand for its type and depends on helper functions
+ * to calculate the score.
+ * 
+ * @param   aHand   Each hand is passed to this function at its creation
+ * @return          a long integer score value
+ */
+    long getScore_old(Hand aHand){
+        long score = Poker.ZERO;
+        int straight = Poker.ZERO;
+        int flush = Poker.ZERO;
+        int hIndex = Poker.ZERO;
+        int rankCount = Poker.ZERO;
+
+        // -- Values used in calculating scores --------------------------------
+
+        int highCard = aHand.hand[5].rank;
+        int lowCard = aHand.hand[1].rank;
+        int nextCard = aHand.hand[4].rank;
+        int thirdCard = aHand.hand[3].rank;
+        int fourthCard = aHand.hand[2].rank;
+        int highCount = Poker.ZERO;
+        int nextCount = Poker.ZERO;
+        int thirdCount = Poker.ZERO;
+        int fourthCount = Poker.ZERO;
+        int lowCount = Poker.ZERO;
+        int suitCount = Card.CARD_INIT;
+
+        for(int i = Card.CARD_INIT; i < Deck.CPH; i++){
+            if(aHand.hand[i].suit == aHand.hand[i + Card.CARD_INIT].suit){
+                suitCount++;
+            }
+        }
+
+        /* Iterate through hand
+                Break down hand for:
+                - what is the high card in the hand
+                - how many times does each rank appear */
+
+        /*
+        // make an array of the five face values in ascending order
+        int sorted[] = {Poker.ZERO, lowCard, fourthCard, thirdCard, 
+                nextCard, highCard}; 
+        int[] mostCount = Sort.getMostCount();
+        highCount = mostCount[Poker.ZERO];
+        nextCount = mostCount[1];
+        */
+        switch (highCount){
+                case 4: 
+                        aHand.setType("Four of a kind");
+                        return isFourKind(highCard, lowCard);
+                case 3:
+                        if(nextCount == 2){
+                        	aHand.setType("Full house");
+                            return isFullHouse(highCard, lowCard);
+                        }
+                        else  
+                        	aHand.setType("Three of a kind");
+                            return isThreeKind(highCard, nextCard, lowCard);
+                case 2:
+                        if(nextCount == 2){
+                        	aHand.setType("Two pairs");
+                            return isTwoPair(highCard, highCard, lowCard);
+                        }
+                        else
+                        	aHand.setType("One pair");
+                            return isPair(highCard, nextCard, thirdCard,
+                                        lowCard);	
+                case 1:
+                        if (Detect.hasStraight(sorted) == true){
+                            if (suitCount == Deck.CPH){
+                            	aHand.setType("Straight flush");  
+                                return isStraightFlush(lowCard);
+                            }
+                            aHand.setType("Straight");
+                                return isStraight(lowCard);
+                        }
+                        else
+                        if (suitCount == Deck.CPH){
+                        	aHand.setType("Flush");
+                            //aHand = isFlush(aHand);
+                            return aHand.score;
+                        }
+                        else
+                            aHand.setType("High card");
+                            return isHighCard(sorted);
+                default:
+                        System.out.println("logic error in getScore function");
+        }
+        return score;
+    }  
+    
+    //---------------Sort.java--------
+        
+/**                        getSortedHand
+ * Matches information from the Hand object back to the int array of sorted
+ * Card ID#s, resulting in a Hand sorted by ascending Card value.
+ * <p>Maybe there's an easier way to do this.
+ * 
+ * @param   sorted  array of Card ID#s sorted by ascending value
+ * @param   uHand   Hand object to be sorted
+ * @return          Hand object with Cards sorted by ascending value
+*
+*/
+    Hand getSortedHand(int[] sorted, Hand uHand){
+        Hand sHand = new Hand();
+            boolean removed[] = new boolean[Deck.CPH + Card.CARD_INIT];
+        for(int cSortIndex = Card.CARD_INIT; cSortIndex <= Deck.CPH; 
+                    cSortIndex++){
+            
+            for(int hSortIndex = Card.CARD_INIT; hSortIndex <= Deck.CPH;
+                        hSortIndex++){
+                // Taking face value from the sorted int array, matching it 
+                // back to face values from the unsorted hand, reading those
+                // values into new sorted hand
+                // removed[] prevents matching to already-matched cards: 
+                // otherwise a pair might count the same card twice instead of
+                // getting both of the same-value cards
+                if(removed[hSortIndex]){
+                    continue;
+                }
+                if(sorted[cSortIndex] == uHand.hand[hSortIndex].rank){
+                    sHand.hand[cSortIndex] = uHand.hand[hSortIndex];
+                    //System.out.println(uHand.hand[hSortIndex].iDNum);
+                    //System.out.println(sHand.hand[cSortIndex].iDNum);
+                    removed[hSortIndex] = true;
+                    break;
+                }
+            }
+        }
+        sHand.handID = uHand.handID;
+        sHand.type = uHand.type;
+        return sHand;
+    }  

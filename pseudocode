@@ -1,0 +1,38 @@
+Variables
+	number of players
+	number of cards per hand
+
+Actions
+	
+	Generate deck
+		- cards 1-52
+		- what data structure?
+			default deck has fields for rank, rank name, suit name and suit
+			
+	Shuffle deck
+		randomize
+	Deal hands
+		
+	Score hands
+		detect type
+		assign score
+			- can use SLL as a multiplier, to keep all possible combinations unique
+			
+			Low to high:
+				- high card - 6 bits
+				- one pair  - 5 bits (11)
+				- two pair  - 5 bits (16)
+				- three of a kind - 6 bits (22)
+				- straight  - 4 bits (26)
+				- flush		- 6 bits (32)
+				- full house - 6 bits (38)
+				- four of a kind - 6 bits (44)
+				- straight flush 6 bits (50)
+			https://www.pokerstars.com/poker/games/rules/hand-rankings/
+	Rank hands
+	Display winner
+
+Objects 
+	card
+	hand
+	deck
